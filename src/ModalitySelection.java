@@ -3,12 +3,12 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class AppInitiazor {
+public class ModalitySelection {
     private JButton modalitaDipendenteButton;
     private JButton modalitaResponsabileButton;
     public JPanel panelMain;
 
-    public AppInitiazor() {
+    public ModalitySelection() {
 
         modalitaDipendenteButton.addActionListener(new ActionListener() {
             @Override

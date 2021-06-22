@@ -2,23 +2,14 @@ import javax.swing.*;
 
 public class AttendApp {
 
+    private static AttendApp singleton;
 
-
-    public static void main(String[] args){
-
-
-        //SistemaStipendi sistemaStipendi = new SistemaStipendi();
-        //sistemaStipendi.populateDB();
-
-        //istanzia il singleton SistemaStipendi e DispositivoRilevamento
-
-        JFrame frame = new JFrame("attendApp");
-        frame.setContentPane(new AppInitiazor().panelMain);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.pack();
-        frame.setVisible(true);
-
-
+    public static AttendApp getIstanza(){
+        if(singleton == null)
+            singleton = new AttendApp();
+        return singleton;
     }
+
+
 
 }
