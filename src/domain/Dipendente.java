@@ -2,20 +2,25 @@ package domain;
 
 public class Dipendente {
 
-    private final int idDipendente;
+    private  int idDipendente;
     private String nome;
     private String cognome;
     private String telefono;
     private String email;
     private final int codicebio;
 
-    public Dipendente(int idDipendente, String nome, String cognome, String telefono, String email, int codicebio) {
-        this.idDipendente = idDipendente;
+    public Dipendente(String nome, String cognome, String telefono, String email, int codicebio) {
+
         this.nome = nome;
         this.cognome = cognome;
         this.telefono = telefono;
         this.email = email;
         this.codicebio = codicebio;
+    }
+
+
+    public void setIdDipendente(int idDipendente) {
+        this.idDipendente = idDipendente;
     }
 
     public int getIdDipendente() {
@@ -56,5 +61,17 @@ public class Dipendente {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    @Override
+    public String toString() {
+        return "Dipendente{" +
+                "idDipendente=" + idDipendente +
+                ", nome='" + nome + '\'' +
+                ", cognome='" + cognome + '\'' +
+                ", telefono='" + telefono + '\'' +
+                ", email='" + email + '\'' +
+                ", codicebio=" + codicebio +
+                '}';
     }
 }

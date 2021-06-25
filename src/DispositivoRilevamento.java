@@ -1,5 +1,7 @@
 import domain.Filiale;
 
+import java.util.Scanner;
+
 public class DispositivoRilevamento {
 
     private static DispositivoRilevamento singleton;
@@ -40,7 +42,14 @@ public class DispositivoRilevamento {
         return filiale;
     }
 
-    public void getCodiceBio(){
+    public int getCodiceBio(){
+        Scanner keyboard = new Scanner(System.in);
+        System.out.println("Appoggia il dito per rilevare l'impronta e procedere all'autenticazione...");
+        while (!keyboard.nextLine().equals("/n")){
+            System.out.println("Lettura errata, riprova");
+
+        }
+            return (int)(Math.random()*(5));
 
     }
 

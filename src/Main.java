@@ -8,10 +8,10 @@ public class Main {
     private SistemaStipendi sistemaStipendi;
     private DispositivoRilevamento dispositivoRilevamento;
 
+
     public Main() {
 
         sistemaStipendi = SistemaStipendi.getIstanza();
-        dispositivoRilevamento = DispositivoRilevamento.getIstanza();
         attendApp = AttendApp.getIstanza();
 
     }
@@ -24,21 +24,33 @@ public class Main {
 
         switch (option) {
             case 1:
+                //DIPENDENTE
+                main.dispositivoRilevamento = DispositivoRilevamento.getIstanza();
 
-                int choice_dip = main.showMenuDipendente();
-                switch (choice_dip) {
-                    case 1:
+                if(main.isLogged()){
+                    main.attendApp.setModality("dipendente");
+                    int choice_dip = main.showMenuDipendente();
+                    switch (choice_dip) {
+                        case 1:
 
-                        break;
-                    case 2:
-                        // Perform "encrypt number" case.
-                        break;
+                            break;
+                        case 2:
 
-                    default:
-                        System.exit(1);
+                            break;
+                        case 3:
+                            main.attendApp.setIdDipendenteLogged(0);
+                            main.showModalitySelection();
+                            break;
+
+
+                        default:
+                            // System.exit(1);
+                    }
+                    break;
                 }
-                break;
+
             case 2:
+                main.attendApp.setModality("responsabile");
                 int choice_resp = main.showMenuResponsabile();
                 switch (choice_resp) {
                     case 1:
@@ -47,13 +59,17 @@ public class Main {
                     case 2:
                         // Perform "encrypt number" case.
                         break;
+                    case 3:
+                        main.showModalitySelection();
+                        break;
 
                     default:
-                        System.exit(1);
+                       // System.exit(1);
                 }
-
-            default:
+            case 3:
                 System.exit(1);
+            default:
+               // System.exit(1);
         }
 
     }
@@ -113,6 +129,10 @@ public class Main {
 
         return optionn;
 
+    }
+
+    public boolean isLogged(){
+        return attendApp.identificaDipendente(dispositivoRilevamento.getCodiceBio());
     }
 
 

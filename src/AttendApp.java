@@ -7,9 +7,11 @@ public class AttendApp {
     private static AttendApp singleton;
 
     private String modality;
+    private int idDipendenteLogged;
+    private SistemaStipendi sistemaStipendi;
 
     public AttendApp(){
-
+        this.sistemaStipendi = SistemaStipendi.getIstanza();
     }
 
     public static AttendApp getIstanza(){
@@ -18,9 +20,14 @@ public class AttendApp {
         return singleton;
     }
 
-    public int identificaDipendente(int codicebio){
+    public boolean identificaDipendente(int codicebio){
 
-        return 1;
+        this.sistemaStipendi.getDipendenti().forEach( (id,dip)->{
+            if(dip.getCodicebio() == codicebio)
+            this.idDipendenteLogged = dip.getIdDipendente();
+        });
+        return idDipendenteLogged != 0;
+
     }
 
     public boolean validaRiepilogo(Riepilogo riepilogo){
@@ -58,5 +65,13 @@ public class AttendApp {
 
     public void setModality(String modality) {
         this.modality = modality;
+    }
+
+    public int getIdDipendenteLogged() {
+        return idDipendenteLogged;
+    }
+
+    public void setIdDipendenteLogged(int idDipendenteLogged) {
+        this.idDipendenteLogged = idDipendenteLogged;
     }
 }
