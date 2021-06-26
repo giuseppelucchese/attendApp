@@ -43,14 +43,7 @@ public class DispositivoRilevamento {
     }
 
     public int getCodiceBio(){
-        Scanner keyboard = new Scanner(System.in);
-        System.out.println("Appoggia il dito per rilevare l'impronta e procedere all'autenticazione...");
-        while (!keyboard.nextLine().equals("/n")){
-            System.out.println("Lettura errata, riprova");
-
-        }
-            return (int)(Math.random()*(5));
-
+        return (int)(Math.random()*(5));
     }
 
 

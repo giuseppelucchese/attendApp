@@ -1,6 +1,7 @@
 package domain;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -66,9 +67,14 @@ public class Riepilogo {
         this.registrazioni.put(id, registrazione);
     }
 
-    public Map<Integer,Registrazione> getAllRegistrazioniMensili(int giorno, int mese){
-        return  registrazioni.entrySet().stream()
-                .filter(x -> x.getValue().getGiorno() == giorno && x.getValue().getMese() == mese && x.getValue().getAnno() == anno)
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+//    public Map<Integer,Registrazione> getAllRegistrazioniMensili(int giorno, int mese){
+//        return  registrazioni.entrySet().stream()
+//                .filter(x -> x.getValue().getGiorno() == giorno && x.getValue().getMese() == mese && x.getValue().getAnno() == anno)
+//                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+//    }
+
+
+    public Map<Integer, Registrazione> getRegistrazioni() {
+        return registrazioni;
     }
 }

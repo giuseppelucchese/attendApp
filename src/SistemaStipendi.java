@@ -30,16 +30,17 @@ public class SistemaStipendi {
     }
 
     public boolean validaRiepilogo(Riepilogo riepilogo){
+        riepilogo.setValidato(true);
         this.archivioRiepiloghi.add(riepilogo);
         return true;
     }
 
-    public Map<Integer,Dipendente> getDipendenti() {
+    public HashMap<Integer,Dipendente> getDipendenti() {
         return dipendenti;
     }
 
     public void addDipendente(Dipendente dipendente){
-        int id = this.dipendenti.size()-1;
+        int id = this.dipendenti.size();
         dipendente.setIdDipendente(id);
         this.dipendenti.put(id, dipendente);
     }

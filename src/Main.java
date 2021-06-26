@@ -1,3 +1,5 @@
+import domain.Registrazione;
+
 import java.io.IOException;
 import java.util.Scanner;
 
@@ -31,17 +33,22 @@ public class Main {
                     main.attendApp.setModality("dipendente");
                     int choice_dip = main.showMenuDipendente();
                     switch (choice_dip) {
+                        case 0:
+                            System.out.println(main.attendApp.getDipendenteLogged().toString());
+                            break;
                         case 1:
-
+                            //REGISTRA ENTRATA
+                            main.attendApp.registraIngresso();
+                            System.out.println("Ingresso registrato correttamente!");
                             break;
                         case 2:
-
+                            main.attendApp.registraUscita();
+                            System.out.println("Uscita registrata correttamente!");
                             break;
                         case 3:
                             main.attendApp.setIdDipendenteLogged(0);
                             main.showModalitySelection();
                             break;
-
 
                         default:
                             // System.exit(1);
@@ -103,6 +110,7 @@ public class Main {
         Scanner keyboard = new Scanner(System.in);
         System.out.println("Dipendente Main Menu:");
         System.out.println("--------------");
+        System.out.println("0.Profilo Personale");
         System.out.println("1.Registra Entrata");
         System.out.println("2.Registra Uscita");
         System.out.println("3.Esci");
@@ -132,7 +140,18 @@ public class Main {
     }
 
     public boolean isLogged(){
-        return attendApp.identificaDipendente(dispositivoRilevamento.getCodiceBio());
+        boolean isLogged = false;
+        while(!isLogged){
+            Scanner keyboard = new Scanner(System.in);
+            System.out.println("Appoggia il dito per rilevare l'impronta e procedere all'autenticazione...");
+            while (!keyboard.nextLine().equals("a")){
+                System.out.println("Lettura errata, riprova...");
+                System.out.println("Appoggia il dito per rilevare l'impronta e procedere all'autenticazione...");
+
+            }
+            isLogged = attendApp.identificaDipendente(dispositivoRilevamento.getCodiceBio());
+        }
+        return isLogged;
     }
 
 
