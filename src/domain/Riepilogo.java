@@ -12,11 +12,12 @@ public class Riepilogo {
     private int anno;
     private boolean validato;
 
-    private Map<Integer,Registrazione> registrazioni;
+    private HashMap<Integer,Registrazione> registrazioni;
 
     public Riepilogo(int mese, int anno) {
         this.mese = mese;
         this.anno = anno;
+        this.registrazioni = new HashMap<Integer,Registrazione>();
 
     }
 
@@ -62,19 +63,25 @@ public class Riepilogo {
     }
 
     public void addRegistrazione (Registrazione registrazione){
-        int id = this.registrazioni.size()-1;
-        registrazione.setIdRegistrazione(id);
+        int id = registrazione.getIdRegistrazione();
         this.registrazioni.put(id, registrazione);
     }
 
-//    public Map<Integer,Registrazione> getAllRegistrazioniMensili(int giorno, int mese){
-//        return  registrazioni.entrySet().stream()
-//                .filter(x -> x.getValue().getGiorno() == giorno && x.getValue().getMese() == mese && x.getValue().getAnno() == anno)
-//                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
-//    }
-
+    public void eliminaRegistrazione (int idRegistrazione){
+        this.registrazioni.remove(idRegistrazione);
+    }
 
     public Map<Integer, Registrazione> getRegistrazioni() {
         return registrazioni;
+    }
+
+    @Override
+    public String toString() {
+        return "Riepilogo{" +
+                "mese=" + mese +
+                ", anno=" + anno +
+                ", validato=" + validato +
+                ", registrazioni=" + registrazioni +
+                '}';
     }
 }

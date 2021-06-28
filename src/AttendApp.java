@@ -15,11 +15,17 @@ public class AttendApp {
     private String modality;
     private int idDipendenteLogged;
     private int codiceBioDipLogged;
+    private int codiceFiliale;
     private SistemaStipendi sistemaStipendi;
+    private DispositivoRilevamento dispositivoRilevamento;
     private HashMap<Integer,Riepilogo> riepiloghi;
 
     public AttendApp(){
         this.sistemaStipendi = SistemaStipendi.getIstanza();
+        this.riepiloghi = new HashMap<Integer,Riepilogo>();
+        this.dispositivoRilevamento = DispositivoRilevamento.getIstanza();
+
+        this.codiceFiliale = this.dispositivoRilevamento.getFilialeAssociata().getIdentificativo();
     }
 
     public static AttendApp getIstanza(){
@@ -28,7 +34,8 @@ public class AttendApp {
         return singleton;
     }
 
-    public boolean identificaDipendente(int codicebio){
+    public boolean identificaDipendente(){
+        int codicebio = dispositivoRilevamento.getCodiceBio();
         this.sistemaStipendi.getDipendenti().forEach( (id,dip)->{
             if(dip.getCodicebio() == codicebio)
             this.idDipendenteLogged = dip.getIdDipendente();
@@ -43,22 +50,27 @@ public class AttendApp {
     }
 
     public void registraIngresso(){
-        LocalDateTime now = LocalDateTime.now();
-        int idRiepilogo = now.getYear()+now.getMonthValue()+this.idDipendenteLogged;
-        int idRegistrazione = now.getYear()+now.getMonthValue()+now.getHour()+ now.getMinute() + now.getSecond() +this.idDipendenteLogged;
-        //recupero i riepiloghi di un determinato id = meseannodipendente
-        Riepilogo riepilogo = this.riepiloghi.get(idRiepilogo);
 
-        Registrazione registrazione = new Registrazione();
+        LocalDateTime now = LocalDateTime.now();
+        int idRegistrazione= now.getYear()+now.getMonthValue()+now.getDayOfMonth()+idDipendenteLogged+codiceFiliale;
+        int idRiepilogo = now.getYear()+now.getMonthValue(); // chiave del riepilogo mese+anno
+
+        Riepilogo riepilogo = this.riepiloghi.get(idRiepilogo);
+        if(riepilogo == null) riepilogo = new Riepilogo(now.getMonthValue(),now.getYear());
+
+        Registrazione registrazione = riepilogo.getRegistrazioni().get(idRegistrazione);
+        if(registrazione == null) registrazione = new Registrazione();
+
+        registrazione.setIdRegistrazione(idRegistrazione);
         registrazione.setGiorno(now.getDayOfMonth());
         registrazione.setMese(now.getMonth().getValue());
         registrazione.setAnno(now.getYear());
         registrazione.setOraEntrata(now.getHour());
         registrazione.setMinEntrata(now.getMinute());
-        registrazione.setIdRegistrazione(idRegistrazione);
+        registrazione.setDipendente(getDipendenteLogged());
+        registrazione.setFiliale(dispositivoRilevamento.getFilialeAssociata());
 
-        //
-        riepilogo.getRegistrazioni().put(idRegistrazione,registrazione);
+        riepilogo.addRegistrazione(registrazione);
 
         //aggiungo il riepilogo ai riepiloghi totali
         this.riepiloghi.put(idRiepilogo, riepilogo);
@@ -67,30 +79,53 @@ public class AttendApp {
     }
 
     public void registraUscita(){
+
         LocalDateTime now = LocalDateTime.now();
-        // l'uscita si può registrare solo se viene registrato almeno un 'ingresso per quel dipendente per quel mese giorno anno
-        int idRiepilogo = now.getYear()+now.getMonthValue()+this.idDipendenteLogged;
-        int idRegistrazione = now.getYear()+now.getMonthValue()+now.getHour()+ now.getMinute() + now.getSecond() +this.idDipendenteLogged;
+        int idRegistrazione= now.getYear()+now.getMonthValue()+now.getDayOfMonth()+idDipendenteLogged+codiceFiliale;
+        int idRiepilogo = now.getYear()+now.getMonthValue(); // chiave del riepilogo mese+anno
+
+        Riepilogo riepilogo = this.riepiloghi.get(idRiepilogo);
+        if(riepilogo == null) riepilogo = new Riepilogo(now.getMonthValue(),now.getYear());
+
+        Registrazione registrazione = riepilogo.getRegistrazioni().get(idRegistrazione);
+        if(registrazione == null) registrazione = new Registrazione();
+
+        registrazione.setIdRegistrazione(idRegistrazione);
+        registrazione.setGiorno(now.getDayOfMonth());
+        registrazione.setMese(now.getMonth().getValue());
+        registrazione.setAnno(now.getYear());
+        registrazione.setOraUscita(now.getHour());
+        registrazione.setMinUscita(now.getMinute());
+        registrazione.setDipendente(getDipendenteLogged());
+        registrazione.setFiliale(dispositivoRilevamento.getFilialeAssociata());
+
+        riepilogo.addRegistrazione(registrazione);
+
+        //aggiungo il riepilogo ai riepiloghi totali
+        this.riepiloghi.put(idRiepilogo, riepilogo);
+
+
     }
 
-    public void visualizzaRiepilogoMensile( int mese, int anno){
+    public Riepilogo getRiepilogoMensile( int mese, int anno){
+        return  this.riepiloghi.get(mese+anno);
+    }
+
+    public Map<Integer,Registrazione> getRiepilogoMensileDipendente(int mese, int anno, int idDipendente){
+
+        return this.riepiloghi.get(mese+anno).getRegistrazioniMensiliDipendente(idDipendente);
 
     }
 
-    public void visualizzaRiepilogoMensileDipendente(int mese, int anno, int idDipendente){
 
-    }
-
-    public boolean eliminaRegistrazione(int idRegistrazione){
-        return true;
-    }
-
-    public boolean idDipendenteMod(){
-        return true;
+    public boolean isDipendenteMod(){
+        if (this.modality == "dipendente") return true;
+        return false;
     }
 
     public boolean isResponsabileMod(){
-        return true;
+        if (this.modality == "responsabile") return true;
+        return false;
     }
 
     public void setModality(String modality) {

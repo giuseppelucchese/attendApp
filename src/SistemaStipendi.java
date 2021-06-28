@@ -36,6 +36,7 @@ public class SistemaStipendi {
     }
 
     public HashMap<Integer,Dipendente> getDipendenti() {
+
         return dipendenti;
     }
 
@@ -44,4 +45,6 @@ public class SistemaStipendi {
         dipendente.setIdDipendente(id);
         this.dipendenti.put(id, dipendente);
     }
+
+
 }

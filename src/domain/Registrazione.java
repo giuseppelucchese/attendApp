@@ -11,6 +11,7 @@ public class Registrazione {
     private int minUscita;
     private int idRegistrazione;
     private Dipendente dipendente;
+    private Filiale filiale;
 
     public Registrazione() {
     }
@@ -21,6 +22,14 @@ public class Registrazione {
 
     public void setDipendente(Dipendente dipendente) {
         this.dipendente = dipendente;
+    }
+
+    public Filiale getFiliale() {
+        return filiale;
+    }
+
+    public void setFiliale(Filiale filiale) {
+        this.filiale = filiale;
     }
 
     public int getIdRegistrazione() {
@@ -85,5 +94,21 @@ public class Registrazione {
 
     public void setMinUscita(int minUscita) {
         this.minUscita = minUscita;
+    }
+
+    @Override
+    public String toString() {
+        return "Registrazione{" +
+                "mese=" + mese +
+                ", anno=" + anno +
+                ", giorno=" + giorno +
+                ", oraEntrata=" + oraEntrata +
+                ", minEntrata=" + minEntrata +
+                ", oraUscita=" + oraUscita +
+                ", minUscita=" + minUscita +
+                ", idRegistrazione=" + idRegistrazione +
+                ", dipendente=" + dipendente +
+                ", filiale=" + filiale +
+                '}';
     }
 }
