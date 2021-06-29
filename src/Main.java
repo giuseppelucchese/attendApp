@@ -23,96 +23,95 @@ public class Main {
     public static void main(String[] args) throws IOException {
 
         Main main = new Main();
-        int choice_dip;
-        int choice_menu;
-        int choice_resp;
+        String choice_dip;
+        String choice_menu;
+        String choice_resp;
+        Scanner keyboard = new Scanner(System.in);
         do {
-            choice_menu = main.showModalitySelection();
-            switch (choice_menu) {
-                case 1:
+            main.showModalitySelection();
+            choice_menu = keyboard.nextLine();
+            switch ( choice_menu) {
+                case "1":
                     //DIPENDENTE
                     main.dispositivoRilevamento = DispositivoRilevamento.getIstanza();
-
                     if(main.isLogged()){
                         main.attendApp.setModality("dipendente");
                         do {
-                            choice_dip = main.showMenuDipendente();
+                            main.showMenuDipendente();
+                            choice_dip = keyboard.nextLine();
                             switch (choice_dip) {
-                                case 0:
+                                case "0":
                                     //PROFILO PERSONALE
                                     System.out.println(main.attendApp.getDipendenteLogged().toString());
                                     break;
-                                case 1:
+                                case "1":
                                     //REGISTRA ENTRATA
                                     main.attendApp.registraIngresso();
                                     System.out.println("Ingresso registrato correttamente!");
                                     break;
-                                case 2:
+                                case "2":
                                     main.attendApp.registraUscita();
                                     System.out.println("Uscita registrata correttamente!");
                                     break;
-                                case 3:
+                                case "3":
                                     main.attendApp.setIdDipendenteLogged(0);
                                     break;
 
                                 default:
                                     // System.exit(1);
                             }
-                        } while(choice_dip != 3);
+                        } while(!choice_dip.equals("3"));
                         break;
                     }
 
-                case 2:
+                case "2":
                     main.attendApp.setModality("responsabile");
-                    Scanner keyboard = new Scanner(System.in);
                     do {
-                        choice_resp = main.showMenuResponsabile();
+                        main.showMenuResponsabile();
+                        choice_resp = keyboard.nextLine();
                         switch (choice_resp) {
-                            case 1:
+                            case "1":
                                 int mese,anno,idDipendente,idRegistrazione;
                                 System.out.println("Digita il mese ... [es. digita 1 per indicare Gennaio]");
                                 mese = keyboard.nextInt();
                                 System.out.println("Digita l'anno  ...");
                                 anno = keyboard.nextInt();
                                 Riepilogo riepilogo = main.attendApp.getRiepilogoMensile(mese,anno);
-                                main.showDipendenti();
-                                System.out.println("Digita l'id del dipendente da gestire ...");
-                                idDipendente = keyboard.nextInt();
-                                main.showRegistrazioniMensiliDipendente(mese,anno,idDipendente);
-                                System.out.println("Vuoi eliminare una registrazione ? [y/n] ");
-                                String yN = keyboard.nextLine();
-                                while (yN.equals("y") || yN.equals("Y")){
-                                    System.out.println("Digita l'id della registrazione da eliminare");
-                                    idRegistrazione = keyboard.nextInt();
-                                    riepilogo.eliminaRegistrazione(idRegistrazione);
-                                    System.out.println("Vuoi eliminare un'altra registrazione? [y/n]");
-                                    yN = keyboard.nextLine();
+                                if(riepilogo == null) {
+                                    System.out.println("non ci sono riepiloghi per questo mese/anno");
+                                    break;
+                                } else{
+                                    main.showDipendenti();
+                                    System.out.println("Digita l'id del dipendente da gestire ...");
+                                    idDipendente = keyboard.nextInt();
+                                    boolean existsReg = main.showRegistrazioniMensiliDipendente(mese,anno,idDipendente);
+                                    if(existsReg){
+                                        System.out.println("Vuoi eliminare una registrazione ? [y/n] ");
+                                        String yN = keyboard.nextLine();
+                                        while (yN.equals("y") || yN.equals("Y")){
+                                            System.out.println("Digita l'id della registrazione da eliminare");
+                                            idRegistrazione = keyboard.nextInt();
+                                            riepilogo.eliminaRegistrazione(idRegistrazione);
+                                            System.out.println("Vuoi eliminare un'altra registrazione? [y/n]");
+                                            yN = keyboard.nextLine();
+                                        }
+                                }
+
                                 }
                                 break;
-                            case 2:
+                            case "2":
                                 // Perform "encrypt number" case.
                                 break;
-                            case 3:
-                                main.showModalitySelection();
-                                break;
-
-                            default:
-                               // System.exit(1);
                         }
-                    } while(choice_resp != 3);
-                case 3:
-                    System.exit(1);
-                default:
-                   // System.exit(1);
+                    } while(!choice_resp.equals("3"));
+
             }
-        } while(choice_menu != 3);
+        } while(!choice_menu.equals("3"));
 
     }
 
-    public int showModalitySelection() {
+    public void showModalitySelection() {
 
-        int option = 0;
-        Scanner keyboard = new Scanner(System.in);
         System.out.println("Main Menu:");
         System.out.println("--------------");
         System.out.println("1.Modalità Dipendente");
@@ -120,22 +119,11 @@ public class Main {
         System.out.println("3.Esci");
         System.out.println("--------------");
         System.out.println("Seleziona la modalità di avvio:");
-        option = keyboard.nextInt();
-
-        if (option == 1) {
-            this.attendApp.setModality("dipendente");
-        } else {
-            this.attendApp.setModality("Responsabile");
-        }
-
-        return option;
 
     }
 
-    public  int showMenuDipendente() {
+    public  void showMenuDipendente() {
 
-        int optionn = 0;
-        Scanner keyboard = new Scanner(System.in);
         System.out.println("Dipendente Main Menu:");
         System.out.println("--------------");
         System.out.println("0.Profilo Personale");
@@ -144,16 +132,12 @@ public class Main {
         System.out.println("3.Esci");
         System.out.println("--------------");
         System.out.println("Effettua una scelta:");
-        optionn = keyboard.nextInt();
 
-        return optionn;
 
     }
 
-    public  int showMenuResponsabile() {
+    public  void showMenuResponsabile() {
 
-        int optionn = 0;
-        Scanner keyboard = new Scanner(System.in);
         System.out.println("Responsabile Main Menu:");
         System.out.println("--------------");
         System.out.println("1.Gestisci Riepilogo Mensile");
@@ -161,10 +145,6 @@ public class Main {
         System.out.println("3.Esci");
         System.out.println("--------------");
         System.out.println("Effettua una scelta:");
-        optionn = keyboard.nextInt();
-
-        return optionn;
-
     }
 
     public boolean isLogged() {
@@ -187,10 +167,18 @@ public class Main {
          });
      }
 
-     public void showRegistrazioniMensiliDipendente(int mese, int anno, int idDipendente){
-        attendApp.getRiepilogoMensileDipendente(mese,anno,idDipendente).forEach((id,reg)->{
-            System.out.println(reg.toString());
-        });
+     public boolean showRegistrazioniMensiliDipendente(int mese, int anno, int idDipendente){
+        Object prova = attendApp.getRiepilogoMensileDipendente(mese,anno,idDipendente);
+        if(attendApp.getRiepilogoMensileDipendente(mese,anno,idDipendente).isEmpty()){
+            System.out.println("Nessuna registrazione per il dipendente con id" + idDipendente +  "per il mese: " + mese + " e per l'anno: " + anno);
+            return false;
+        }else{
+            attendApp.getRiepilogoMensileDipendente(mese,anno,idDipendente).forEach((id,reg)->{
+                System.out.println(reg.toString());
+            });
+            return true;
+        }
+
      }
 
 
