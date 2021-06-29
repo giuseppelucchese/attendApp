@@ -36,7 +36,6 @@ public class SistemaStipendi {
     }
 
     public HashMap<Integer,Dipendente> getDipendenti() {
-
         return dipendenti;
     }
 

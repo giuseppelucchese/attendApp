@@ -67,8 +67,8 @@ public class Riepilogo {
         this.registrazioni.put(id, registrazione);
     }
 
-    public void eliminaRegistrazione (int idRegistrazione){
-        this.registrazioni.remove(idRegistrazione);
+    public boolean eliminaRegistrazione (int idRegistrazione){
+        return this.registrazioni.remove(idRegistrazione) != null;
     }
 
     public Map<Integer, Registrazione> getRegistrazioni() {

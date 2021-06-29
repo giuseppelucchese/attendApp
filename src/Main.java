@@ -29,7 +29,7 @@ public class Main {
         Scanner keyboard = new Scanner(System.in);
         do {
             main.showModalitySelection();
-            choice_menu = keyboard.nextLine();
+            choice_menu = keyboard.next();
             switch ( choice_menu) {
                 case "1":
                     //DIPENDENTE
@@ -38,7 +38,7 @@ public class Main {
                         main.attendApp.setModality("dipendente");
                         do {
                             main.showMenuDipendente();
-                            choice_dip = keyboard.nextLine();
+                            choice_dip = keyboard.next();
                             switch (choice_dip) {
                                 case "0":
                                     //PROFILO PERSONALE
@@ -66,9 +66,10 @@ public class Main {
 
                 case "2":
                     main.attendApp.setModality("responsabile");
+                    String yN;
                     do {
                         main.showMenuResponsabile();
-                        choice_resp = keyboard.nextLine();
+                        choice_resp = keyboard.next();
                         switch (choice_resp) {
                             case "1":
                                 int mese,anno,idDipendente,idRegistrazione;
@@ -84,19 +85,18 @@ public class Main {
                                     main.showDipendenti();
                                     System.out.println("Digita l'id del dipendente da gestire ...");
                                     idDipendente = keyboard.nextInt();
-                                    boolean existsReg = main.showRegistrazioniMensiliDipendente(mese,anno,idDipendente);
-                                    if(existsReg){
+                                    boolean existsRegs = main.showRegistrazioniMensiliDipendente(mese,anno,idDipendente);
+                                    if(existsRegs){
                                         System.out.println("Vuoi eliminare una registrazione ? [y/n] ");
-                                        String yN = keyboard.nextLine();
+                                        yN = keyboard.next();
                                         while (yN.equals("y") || yN.equals("Y")){
                                             System.out.println("Digita l'id della registrazione da eliminare");
                                             idRegistrazione = keyboard.nextInt();
-                                            riepilogo.eliminaRegistrazione(idRegistrazione);
+                                            main.eliminaRegistrazione(idRegistrazione,riepilogo);
                                             System.out.println("Vuoi eliminare un'altra registrazione? [y/n]");
-                                            yN = keyboard.nextLine();
+                                            yN = keyboard.next();
                                         }
-                                }
-
+                                    }
                                 }
                                 break;
                             case "2":
@@ -110,6 +110,15 @@ public class Main {
 
     }
 
+    public boolean eliminaRegistrazione(int idRegistrazione, Riepilogo riepilogo){
+        if(riepilogo.eliminaRegistrazione(idRegistrazione)){
+            System.out.println("Registrazione eliminata!");
+            return true;
+        } else{
+            System.out.println("Registrazione inesistente!");
+            return false;
+        }
+    }
     public void showModalitySelection() {
 
         System.out.println("Main Menu:");
@@ -168,13 +177,13 @@ public class Main {
      }
 
      public boolean showRegistrazioniMensiliDipendente(int mese, int anno, int idDipendente){
-        Object prova = attendApp.getRiepilogoMensileDipendente(mese,anno,idDipendente);
+
         if(attendApp.getRiepilogoMensileDipendente(mese,anno,idDipendente).isEmpty()){
             System.out.println("Nessuna registrazione per il dipendente con id" + idDipendente +  "per il mese: " + mese + " e per l'anno: " + anno);
             return false;
         }else{
             attendApp.getRiepilogoMensileDipendente(mese,anno,idDipendente).forEach((id,reg)->{
-                System.out.println(reg.toString());
+                System.out.println("id: " + id + " " + reg.toString());
             });
             return true;
         }

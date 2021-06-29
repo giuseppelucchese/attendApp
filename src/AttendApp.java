@@ -144,4 +144,6 @@ public class AttendApp {
         return this.sistemaStipendi.getDipendenti().get(getIdDipendenteLogged());
     }
 
+
+
 }
