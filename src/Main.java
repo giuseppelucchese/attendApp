@@ -1,4 +1,5 @@
 import domain.Registrazione;
+import domain.Responsabile;
 import domain.Riepilogo;
 
 import java.io.IOException;
@@ -10,12 +11,14 @@ public class Main {
     private AttendApp attendApp;
     private SistemaStipendi sistemaStipendi;
     private DispositivoRilevamento dispositivoRilevamento;
+    private Scanner keyboard;
 
 
     public Main() {
 
         sistemaStipendi = SistemaStipendi.getIstanza();
         attendApp = AttendApp.getIstanza();
+        keyboard = new Scanner(System.in);
 
     }
 
@@ -60,14 +63,7 @@ public class Main {
                                     break;
                                 case "3":
                                     //VISUALIZZA RIEPILOGO MENSILE PERSONALE
-                                    int mese,anno;
-                                    System.out.println("Digita il mese ... [es. digita 1 per indicare Gennaio]");
-                                    mese = keyboard.nextInt();
-                                    System.out.println("Digita l'anno  ...");
-                                    anno = keyboard.nextInt();
-                                    main.showRegistrazioniMensiliDipendente(mese,anno,main.attendApp.getIdDipendenteLogged());
-                                    System.out.println("Premi un tasto + invio per continuare..");
-                                    keyboard.next();
+                                    main.visualizzaRiepilogoMensilePersonale();
                                     break;
                                 case "4":
                                     main.attendApp.setIdDipendenteLogged(0);
@@ -82,44 +78,17 @@ public class Main {
 
                 case "2":
                     main.attendApp.setModality("responsabile");
-                    String yN;
                     do {
                         main.showMenuResponsabile();
                         choice_resp = keyboard.next();
                         switch (choice_resp) {
                             case "1":
-                                int mese,anno,idDipendente,idRegistrazione;
-                                System.out.println("Digita il mese ... [es. digita 1 per indicare Gennaio]");
-                                mese = keyboard.nextInt();
-                                System.out.println("Digita l'anno  ...");
-                                anno = keyboard.nextInt();
-                                Riepilogo riepilogo = main.attendApp.getRiepilogoMensile(mese,anno);
-                                if(riepilogo == null) {
-                                    System.out.println("non ci sono riepiloghi per questo mese/anno");
-                                    break;
-                                } else{
-                                    main.showDipendenti();
-                                    System.out.println("Digita l'id del dipendente da gestire ...");
-                                    idDipendente = keyboard.nextInt();
-                                    boolean existsRegs = main.showRegistrazioniMensiliDipendente(mese,anno,idDipendente);
-                                    if(existsRegs){
-                                        System.out.println("Vuoi eliminare una registrazione ? [y/n] ");
-                                        yN = keyboard.next();
-                                        while (yN.equals("y") || yN.equals("Y")){
-                                            System.out.println("Digita l'id della registrazione da eliminare");
-                                            idRegistrazione = keyboard.nextInt();
-                                            main.eliminaRegistrazione(idRegistrazione,riepilogo);
-                                            System.out.println("Vuoi eliminare un'altra registrazione? [y/n]");
-                                            yN = keyboard.next();
-                                        }
-                                    }
-                                }
-                                System.out.println("Premi un tasto + invio per continuare..");
-                                keyboard.next();
+                                //GESTISCI RIEPILOGO MENSILE
+                                main.gestisciRiepilogoMensile();
                                 break;
                             case "2":
-                                System.out.println("Premi un tasto + invio per continuare..");
-                                keyboard.next();
+                                // VALIDA E INVIA RIEPILOGO
+                                main.validaInviaRiepilogo();
                                 break;
                         }
                     } while(!choice_resp.equals("3"));
@@ -128,6 +97,17 @@ public class Main {
         } while(!choice_menu.equals("3"));
 
     }
+
+    public Riepilogo getRiepilogoMensile(){
+        int mese,anno;
+        Scanner keyboard = new Scanner(System.in);
+        System.out.println("Digita il mese ... [es. digita 1 per indicare Gennaio]");
+        mese = keyboard.nextInt();
+        System.out.println("Digita l'anno  ...");
+        anno = keyboard.nextInt();
+        return attendApp.getRiepilogoMensile(mese,anno);
+    }
+
 
     public boolean eliminaRegistrazione(int idRegistrazione, Riepilogo riepilogo){
         if(riepilogo.eliminaRegistrazione(idRegistrazione)){
@@ -176,7 +156,7 @@ public class Main {
         System.out.println("Effettua una scelta:");
     }
 
-    public boolean isLogged() {
+     public boolean isLogged() {
         boolean isLogged = false;
         while (!isLogged) {
             Scanner keyboard = new Scanner(System.in);
@@ -195,10 +175,9 @@ public class Main {
              System.out.println("idDipendente:" + dip.getIdDipendente() +" " + " Nome: " + dip.getNome() + "Cognome: " + dip.getCognome());
          });
      }
-
      public boolean showRegistrazioniMensiliDipendente(int mese, int anno, int idDipendente){
 
-        if(attendApp.getRiepilogoMensileDipendente(mese,anno,idDipendente).isEmpty()){
+        if(attendApp.getRiepilogoMensileDipendente(mese,anno,idDipendente) == null){
             System.out.println("Nessuna registrazione per il dipendente con id" + idDipendente +  "per il mese: " + mese + " e per l'anno: " + anno);
             return false;
         }else{
@@ -208,6 +187,67 @@ public class Main {
             return true;
         }
 
+     }
+     public void visualizzaRiepilogoMensilePersonale(){
+         int mese,anno;
+         System.out.println("Digita il mese ... [es. digita 1 per indicare Gennaio]");
+         mese = keyboard.nextInt();
+         System.out.println("Digita l'anno  ...");
+         anno = keyboard.nextInt();
+         showRegistrazioniMensiliDipendente(mese,anno,attendApp.getIdDipendenteLogged());
+         System.out.println("Premi un tasto + invio per continuare..");
+         keyboard.next();
+     }
+
+     public void gestisciRiepilogoMensile(){
+         Riepilogo riepilogo;
+         int idDipendente,idRegistrazione;
+         String yN;
+         riepilogo = getRiepilogoMensile();
+         if(riepilogo == null) {
+             System.out.println("non ci sono riepiloghi per questo mese/anno");
+             return;
+         } else{
+             showDipendenti();
+             System.out.println("Digita l'id del dipendente da gestire ...");
+             idDipendente = keyboard.nextInt();
+             boolean existsRegs = showRegistrazioniMensiliDipendente(riepilogo.getMese(),riepilogo.getAnno(),idDipendente);
+             if(existsRegs){
+                 System.out.println("Vuoi eliminare una registrazione ? [y/n] ");
+                 yN = keyboard.next();
+                 while (yN.equals("y") || yN.equals("Y")){
+                     System.out.println("Digita l'id della registrazione da eliminare");
+                     idRegistrazione = keyboard.nextInt();
+                     eliminaRegistrazione(idRegistrazione,riepilogo);
+                     System.out.println("Vuoi eliminare un'altra registrazione? [y/n]");
+                     yN = keyboard.next();
+                 }
+             }
+         }
+         System.out.println("Premi un tasto + invio per continuare..");
+         keyboard.next();
+     }
+
+     public void validaInviaRiepilogo(){
+        Riepilogo riepilogo;
+        String yN;
+         riepilogo = getRiepilogoMensile();
+         if(riepilogo == null) {
+             System.out.println("non ci sono riepiloghi per questo mese/anno");
+             return;
+         } else{
+
+             System.out.println("Vuoi validare e inviare il riepilogo al sistema stipendi? [y/n]");
+             yN = keyboard.next();
+             if(yN.equals("y") || yN.equals("Y")){
+                 attendApp.validaRiepilogo(riepilogo);
+                 System.out.println("Riepilogo validato e archiviato dal sistema stipendi.");
+             }else{
+                 System.out.println("Operazione annullata..");
+             }
+         }
+         System.out.println("Premi un tasto + invio per continuare..");
+         keyboard.next();
      }
 
 

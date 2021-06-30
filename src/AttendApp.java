@@ -113,7 +113,8 @@ public class AttendApp {
 
     public Map<Integer,Registrazione> getRiepilogoMensileDipendente(int mese, int anno, int idDipendente){
 
-        return this.riepiloghi.get(mese+anno).getRegistrazioniMensiliDipendente(idDipendente);
+        if(getRiepilogoMensile(mese,anno) == null) return null;
+        return getRiepilogoMensile(mese,anno).getRegistrazioniMensiliDipendente(idDipendente);
 
     }
 
