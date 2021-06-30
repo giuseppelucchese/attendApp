@@ -48,19 +48,35 @@ public class Main {
                                     //REGISTRA ENTRATA
                                     main.attendApp.registraIngresso();
                                     System.out.println("Ingresso registrato correttamente!");
+                                    System.out.println("Premi un tasto + invio per continuare..");
+                                    keyboard.next();
                                     break;
                                 case "2":
+                                    //REGISTRA USCITA
                                     main.attendApp.registraUscita();
                                     System.out.println("Uscita registrata correttamente!");
+                                    System.out.println("Premi un tasto + invio per continuare..");
+                                    keyboard.next();
                                     break;
                                 case "3":
+                                    //VISUALIZZA RIEPILOGO MENSILE PERSONALE
+                                    int mese,anno;
+                                    System.out.println("Digita il mese ... [es. digita 1 per indicare Gennaio]");
+                                    mese = keyboard.nextInt();
+                                    System.out.println("Digita l'anno  ...");
+                                    anno = keyboard.nextInt();
+                                    main.showRegistrazioniMensiliDipendente(mese,anno,main.attendApp.getIdDipendenteLogged());
+                                    System.out.println("Premi un tasto + invio per continuare..");
+                                    keyboard.next();
+                                    break;
+                                case "4":
                                     main.attendApp.setIdDipendenteLogged(0);
                                     break;
 
                                 default:
                                     // System.exit(1);
                             }
-                        } while(!choice_dip.equals("3"));
+                        } while(!choice_dip.equals("4"));
                         break;
                     }
 
@@ -98,9 +114,12 @@ public class Main {
                                         }
                                     }
                                 }
+                                System.out.println("Premi un tasto + invio per continuare..");
+                                keyboard.next();
                                 break;
                             case "2":
-                                // Perform "encrypt number" case.
+                                System.out.println("Premi un tasto + invio per continuare..");
+                                keyboard.next();
                                 break;
                         }
                     } while(!choice_resp.equals("3"));
@@ -138,7 +157,8 @@ public class Main {
         System.out.println("0.Profilo Personale");
         System.out.println("1.Registra Entrata");
         System.out.println("2.Registra Uscita");
-        System.out.println("3.Esci");
+        System.out.println("3.Visualizza riepilogo mensile personale");
+        System.out.println("4.Esci");
         System.out.println("--------------");
         System.out.println("Effettua una scelta:");
 
@@ -150,7 +170,7 @@ public class Main {
         System.out.println("Responsabile Main Menu:");
         System.out.println("--------------");
         System.out.println("1.Gestisci Riepilogo Mensile");
-        System.out.println("2 Valida riepilogo");
+        System.out.println("2.Valida e invia riepilogo");
         System.out.println("3.Esci");
         System.out.println("--------------");
         System.out.println("Effettua una scelta:");
