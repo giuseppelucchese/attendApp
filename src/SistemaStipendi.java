@@ -1,4 +1,6 @@
 import domain.Dipendente;
+import domain.Evento;
+import domain.RichiestaStraordinaria;
 import domain.Riepilogo;
 
 import java.util.*;
@@ -7,12 +9,15 @@ public class SistemaStipendi {
 
     private HashMap<Integer,Dipendente> dipendenti;
     private LinkedList<Riepilogo> archivioRiepiloghi;
+    private LinkedList<Evento> eventiEccezionali;
+    private LinkedList<RichiestaStraordinaria> richiesteStraordinarie;
 
     public SistemaStipendi() {
 
         this.dipendenti = new HashMap<Integer, Dipendente>();
         this. archivioRiepiloghi = new LinkedList<Riepilogo>();
-
+        this.eventiEccezionali = new LinkedList<Evento>();
+        this.richiesteStraordinarie = new LinkedList<RichiestaStraordinaria>();
 
 
         this.addDipendente(new Dipendente("Giuseppe","Lucchese","3457746608","myemail@email.com", 1));
@@ -41,5 +46,12 @@ public class SistemaStipendi {
         this.dipendenti.put(id, dipendente);
     }
 
+    public void accodaRichiestaEventiEccezionali(Evento evento){
+        this.eventiEccezionali.add(evento);
+    }
+
+    public void accodaRichiesteOreStraordinarie(RichiestaStraordinaria richiestaStraordinaria){
+        this.richiesteStraordinarie.add(richiestaStraordinaria);
+    }
 
 }

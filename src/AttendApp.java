@@ -1,6 +1,4 @@
-import domain.Dipendente;
-import domain.Registrazione;
-import domain.Riepilogo;
+import domain.*;
 
 import javax.swing.*;
 import java.time.LocalDateTime;
@@ -46,7 +44,7 @@ public class AttendApp {
     }
 
     public boolean validaRiepilogo(Riepilogo riepilogo){
-        notifyObservers(riepilogo);
+        notifyObserversRiepilogo(riepilogo);
      return true;
     }
 
@@ -154,10 +152,23 @@ public class AttendApp {
         this.observers.remove(observer);
     }
 
-    public void notifyObservers(Riepilogo riepilogo){
+    public void notifyObserversRiepilogo(Riepilogo riepilogo){
         this.observers.forEach(obs -> {
             obs.validaRiepilogo(riepilogo);
         });
     }
+
+    public void notifyObserverEventoEccezionale(Evento evento){
+        this.observers.forEach(obs -> {
+            obs.accodaRichiestaEventiEccezionali(evento);
+        });
+    }
+
+    public void notifyObserverOreStraordinarie(RichiestaStraordinaria richiestaStraordinaria){
+        this.observers.forEach(obs -> {
+            obs.accodaRichiesteOreStraordinarie(richiestaStraordinaria);
+        });
+    }
+
 
 }

@@ -1,8 +1,9 @@
-import domain.Registrazione;
-import domain.Responsabile;
-import domain.Riepilogo;
+import domain.*;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.chrono.ChronoLocalDate;
+import java.util.Date;
 import java.util.Scanner;
 
 public class Main {
@@ -67,6 +68,14 @@ public class Main {
                                     main.visualizzaRiepilogoMensilePersonale();
                                     break;
                                 case "4":
+                                    //RICHIESTA EVENTO ECCEZIONALE
+                                    main.inviaRichiestaEventoEccezionale();
+                                    break;
+                                case "5":
+                                    //RICHIESTA ORE STRAORDINARIE
+                                    main.inviaRichiestaOreStraordinarie();
+                                    break;
+                                case "6":
                                     main.attendApp.setIdDipendenteLogged(0);
                                     break;
 
@@ -139,7 +148,9 @@ public class Main {
         System.out.println("1.Registra Entrata");
         System.out.println("2.Registra Uscita");
         System.out.println("3.Visualizza riepilogo mensile personale");
-        System.out.println("4.Esci");
+        System.out.println("4.Invia richiesta evento eccezionale");
+        System.out.println("5.Invia richiesta ore straordinarie");
+        System.out.println("6.Esci");
         System.out.println("--------------");
         System.out.println("Effettua una scelta:");
 
@@ -198,6 +209,84 @@ public class Main {
          showRegistrazioniMensiliDipendente(mese,anno,attendApp.getIdDipendenteLogged());
          System.out.println("Premi un tasto + invio per continuare..");
          keyboard.next();
+     }
+
+     public void inviaRichiestaEventoEccezionale(){
+        int choiceEvent,giorno,mese,anno;
+        LocalDate dataInizio,dataFine;
+        String yN;
+        EventoComposite eventoComposite = new EventoComposite();
+        do {
+            System.out.println("Digita il tipo di evento..");
+            System.out.println("1-Malattia");
+            System.out.println("2-Ferie");
+            System.out.println("3-Permessi");
+            choiceEvent = keyboard.nextInt();
+            switch (choiceEvent){
+                case 1:
+                    System.out.println("Digita la data di inizio..");
+                    System.out.println("Digita il giorno..");
+                    giorno = keyboard.nextInt();
+                    System.out.println("Digita il mese..");
+                    mese = keyboard.nextInt();
+                    System.out.println("Digita l'anno");
+                    anno = keyboard.nextInt();
+
+                    dataInizio = LocalDate.of(anno,mese,giorno);
+
+                    System.out.println("Digita la data di fine..");
+                    System.out.println("Digita il giorno..");
+                    giorno = keyboard.nextInt();
+                    System.out.println("Digita il mese..");
+                    mese = keyboard.nextInt();
+                    System.out.println("Digita l'anno");
+                    anno = keyboard.nextInt();
+
+                    dataFine = LocalDate.of(anno,mese,giorno);
+
+                    EventoMalattia eventoMalattia = new EventoMalattia(dataInizio,dataFine);
+                    eventoComposite.add(eventoMalattia);
+
+                    break;
+                case 2:
+                    System.out.println("Digita la data di inizio..");
+                    System.out.println("Digita il giorno..");
+                    giorno = keyboard.nextInt();
+                    System.out.println("Digita il mese..");
+                    mese = keyboard.nextInt();
+                    System.out.println("Digita l'anno");
+                    anno = keyboard.nextInt();
+
+                    dataInizio = LocalDate.of(anno,mese,giorno);
+
+                    System.out.println("Digita la data di fine..");
+                    System.out.println("Digita il giorno..");
+                    giorno = keyboard.nextInt();
+                    System.out.println("Digita il mese..");
+                    mese = keyboard.nextInt();
+                    System.out.println("Digita l'anno");
+                    anno = keyboard.nextInt();
+
+                    dataFine = LocalDate.of(anno,mese,giorno);
+
+                    EventoFerie eventoFerie = new EventoFerie(dataInizio,dataFine);
+                    eventoComposite.add(eventoFerie);
+                    break;
+
+                case 3:
+                    break;
+            }
+            System.out.println("Vuoi inviare una nuova richiesta? [y/n]");
+            yN = keyboard.next();
+        }while(yN.equals("y") || yN.equals("N"));
+
+        attendApp.notifyObserverEventoEccezionale(eventoComposite);
+        System.out.println("richiesta inviata correttamente!");
+
+     }
+
+     public void inviaRichiestaOreStraordinarie(){
+
      }
 
      public void gestisciRiepilogoMensile(){
