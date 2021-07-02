@@ -16,8 +16,9 @@ public class Main {
 
     public Main() {
 
-        sistemaStipendi = SistemaStipendi.getIstanza();
+        sistemaStipendi = new SistemaStipendi();
         attendApp = AttendApp.getIstanza();
+        attendApp.registerObserver(sistemaStipendi);
         keyboard = new Scanner(System.in);
 
     }

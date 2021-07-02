@@ -5,6 +5,7 @@ import domain.Riepilogo;
 import javax.swing.*;
 import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -16,12 +17,12 @@ public class AttendApp {
     private int idDipendenteLogged;
     private int codiceBioDipLogged;
     private int codiceFiliale;
-    private SistemaStipendi sistemaStipendi;
+    private LinkedList<SistemaStipendi> observers;
     private DispositivoRilevamento dispositivoRilevamento;
     private HashMap<Integer,Riepilogo> riepiloghi;
 
     public AttendApp(){
-        this.sistemaStipendi = SistemaStipendi.getIstanza();
+        this.observers = new LinkedList<SistemaStipendi>();
         this.riepiloghi = new HashMap<Integer,Riepilogo>();
         this.dispositivoRilevamento = DispositivoRilevamento.getIstanza();
 
@@ -36,7 +37,7 @@ public class AttendApp {
 
     public boolean identificaDipendente(){
         int codicebio = dispositivoRilevamento.getCodiceBio();
-        this.sistemaStipendi.getDipendenti().forEach( (id,dip)->{
+        this.observers.get(1).getDipendenti().forEach( (id,dip)->{
             if(dip.getCodicebio() == codicebio)
             this.idDipendenteLogged = dip.getIdDipendente();
             this.codiceBioDipLogged = codicebio;
@@ -45,7 +46,7 @@ public class AttendApp {
     }
 
     public boolean validaRiepilogo(Riepilogo riepilogo){
-        sistemaStipendi.validaRiepilogo(riepilogo);
+        notifyObservers(riepilogo);
      return true;
     }
 
@@ -142,9 +143,21 @@ public class AttendApp {
     }
 
     public Dipendente getDipendenteLogged(){
-        return this.sistemaStipendi.getDipendenti().get(getIdDipendenteLogged());
+        return this.observers.get(1).getDipendenti().get(getIdDipendenteLogged());
     }
 
+    public void registerObserver(SistemaStipendi observer){
+        this.observers.add(observer);
+    }
 
+    public void removeObserver(SistemaStipendi observer){
+        this.observers.remove(observer);
+    }
+
+    public void notifyObservers(Riepilogo riepilogo){
+        this.observers.forEach(obs -> {
+            obs.validaRiepilogo(riepilogo);
+        });
+    }
 
 }

@@ -5,8 +5,6 @@ import java.util.*;
 
 public class SistemaStipendi {
 
-    private static SistemaStipendi singleton;
-
     private HashMap<Integer,Dipendente> dipendenti;
     private LinkedList<Riepilogo> archivioRiepiloghi;
 
@@ -14,6 +12,8 @@ public class SistemaStipendi {
 
         this.dipendenti = new HashMap<Integer, Dipendente>();
         this. archivioRiepiloghi = new LinkedList<Riepilogo>();
+
+
 
         this.addDipendente(new Dipendente("Giuseppe","Lucchese","3457746608","myemail@email.com", 1));
         this.addDipendente(new Dipendente("Mario","Rossi","3223344555","myemail@email.com", 2));
@@ -23,11 +23,7 @@ public class SistemaStipendi {
 
     }
 
-    public static SistemaStipendi getIstanza(){
-        if(singleton == null)
-            singleton = new SistemaStipendi();
-        return singleton;
-    }
+
 
     public boolean validaRiepilogo(Riepilogo riepilogo){
         riepilogo.setValidato(true);
