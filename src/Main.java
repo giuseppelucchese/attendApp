@@ -212,7 +212,7 @@ public class Main {
      }
 
      public void inviaRichiestaEventoEccezionale(){
-        int choiceEvent,giorno,mese,anno;
+        int choiceEvent,giorno,mese,anno,oraInizio,minInizio,oraFine,minFine;
         LocalDate dataInizio,dataFine;
         String yN;
         EventoComposite eventoComposite = new EventoComposite();
@@ -274,6 +274,17 @@ public class Main {
                     break;
 
                 case 3:
+                    System.out.println("Digita l'ora d'inizio");
+                    oraInizio = keyboard.nextInt();
+                    System.out.println("Digita i minuti d'inizio");
+                    minInizio = keyboard.nextInt();
+                    System.out.println("Digita l'ora di fine");
+                    oraFine = keyboard.nextInt();
+                    System.out.println("Digita i minuti di fine");
+                    minFine = keyboard.nextInt();
+
+                    EventoPermessi eventoPermessi = new EventoPermessi(oraInizio,minInizio,oraFine,minFine);
+                    eventoComposite.add(eventoPermessi);
                     break;
             }
             System.out.println("Vuoi inviare una nuova richiesta? [y/n]");
@@ -286,6 +297,24 @@ public class Main {
      }
 
      public void inviaRichiestaOreStraordinarie(){
+        int giorno,mese,anno,numOre;
+        LocalDate data;
+         System.out.println("Digita la data di richiesta..");
+         System.out.println("Digita il giorno..");
+         giorno = keyboard.nextInt();
+         System.out.println("Digita il mese");
+         mese = keyboard.nextInt();
+         System.out.println("Digita l'anno");
+         anno = keyboard.nextInt();
+         data = LocalDate.of(anno,mese,giorno);
+         System.out.println("Digita il numero di ore");
+         numOre = keyboard.nextInt();
+         if (numOre > 5 ) {
+             System.out.println("Non puoi richiedere un numero di ore maggiore di 5");
+
+         }else {
+           attendApp.notifyObserverOreStraordinarie(new RichiestaStraordinaria(data,numOre));
+         }
 
      }
 
