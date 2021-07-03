@@ -1,7 +1,7 @@
 package domain;
 
 public abstract class Evento {
-    private int ore;
+    private String tipo;
     private Dipendente dipendente;
 
 
@@ -9,15 +9,19 @@ public abstract class Evento {
     public abstract int getTotaleOre();
 
 
-    public int getOre(){
-        return ore;
-    }
+
 
     public void setDipendente(Dipendente dipendente){
         this.dipendente = dipendente;
     }
 
+    public String getTipo() {
+        return tipo;
+    }
 
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
+    }
     // metodi per gestire i componenti
 
     public void add(Evento evento)	{

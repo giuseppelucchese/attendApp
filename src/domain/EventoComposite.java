@@ -25,8 +25,16 @@ public class EventoComposite extends Evento{
     @Override
     public int getTotaleOre() {
         this.eventi.forEach(evento -> {
-            this.totaleOre += evento.getOre();
+            this.totaleOre += evento.getTotaleOre();
         });
         return  totaleOre;
+    }
+
+    @Override
+    public String toString() {
+        return "EventoComposite{" +
+                "eventi=" + eventi +
+                ", totaleOre=" + totaleOre +
+                '}';
     }
 }

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.chrono.ChronoLocalDate;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.Scanner;
 
 public class Main {
@@ -100,8 +101,12 @@ public class Main {
                                 // VALIDA E INVIA RIEPILOGO
                                 main.validaInviaRiepilogo();
                                 break;
+
+                            case "3":
+                                //GESTISCI EVENTI ECCEZIONALI
+                                main.gestisciEventoEccezionale();
                         }
-                    } while(!choice_resp.equals("3"));
+                    } while(!choice_resp.equals("4"));
 
             }
         } while(!choice_menu.equals("3"));
@@ -163,7 +168,8 @@ public class Main {
         System.out.println("--------------");
         System.out.println("1.Gestisci Riepilogo Mensile");
         System.out.println("2.Valida e invia riepilogo");
-        System.out.println("3.Esci");
+        System.out.println("2.Gestisci eventi eccezionali");
+        System.out.println("4.Esci");
         System.out.println("--------------");
         System.out.println("Effettua una scelta:");
     }
@@ -245,6 +251,7 @@ public class Main {
                     dataFine = LocalDate.of(anno,mese,giorno);
 
                     EventoMalattia eventoMalattia = new EventoMalattia(dataInizio,dataFine);
+                    eventoMalattia.setTipo("malattia");
                     eventoComposite.add(eventoMalattia);
 
                     break;
@@ -270,6 +277,7 @@ public class Main {
                     dataFine = LocalDate.of(anno,mese,giorno);
 
                     EventoFerie eventoFerie = new EventoFerie(dataInizio,dataFine);
+                    eventoFerie.setTipo("ferie");
                     eventoComposite.add(eventoFerie);
                     break;
 
@@ -284,6 +292,7 @@ public class Main {
                     minFine = keyboard.nextInt();
 
                     EventoPermessi eventoPermessi = new EventoPermessi(oraInizio,minInizio,oraFine,minFine);
+                    eventoPermessi.setTipo("permessi");
                     eventoComposite.add(eventoPermessi);
                     break;
             }
@@ -291,7 +300,7 @@ public class Main {
             yN = keyboard.next();
         }while(yN.equals("y") || yN.equals("N"));
 
-        attendApp.notifyObserverEventoEccezionale(eventoComposite);
+        attendApp.addEventoEccezionale(eventoComposite);
         System.out.println("richiesta inviata correttamente!");
 
      }
@@ -368,6 +377,29 @@ public class Main {
          System.out.println("Premi un tasto + invio per continuare..");
          keyboard.next();
      }
+
+     public void gestisciEventoEccezionale(){
+         LinkedList<Evento> eventiEccezionali = attendApp.getEventiEccezionali();
+        int idEvento;
+        String yN;
+         System.out.println("Lista Eventi in attesa di gestione...");
+        for(int i = 0 ; i< eventiEccezionali.size(); i++){
+            System.out.println("id: " + i + " " + eventiEccezionali.get(i).toString());
+        }
+
+        System.out.println("Digita l'id dell'evento da gestire.. ");
+        idEvento = keyboard.nextInt();
+        System.out.println("Vuoi autorizzare questo evento? [y/n]");
+        yN = keyboard.next();
+        if(yN.equals("y") || yN.equals("Y")){
+            attendApp.autorizzaEventoEccezionale(eventiEccezionali.get(idEvento));
+        }else{
+            attendApp.rifutaEventoEccezionale(eventiEccezionali.get(idEvento));
+        }
+
+     }
+
+
 
 
 }

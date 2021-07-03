@@ -18,10 +18,14 @@ public class AttendApp {
     private LinkedList<SistemaStipendi> observers;
     private DispositivoRilevamento dispositivoRilevamento;
     private HashMap<Integer,Riepilogo> riepiloghi;
+    private LinkedList<Evento> eventiEccezionali;
+    private LinkedList<RichiestaStraordinaria> richiesteStraordinarie;
 
     public AttendApp(){
         this.observers = new LinkedList<SistemaStipendi>();
         this.riepiloghi = new HashMap<Integer,Riepilogo>();
+        this.eventiEccezionali = new LinkedList<Evento>();
+        this.richiesteStraordinarie = new LinkedList<RichiestaStraordinaria>();
         this.dispositivoRilevamento = DispositivoRilevamento.getIstanza();
 
         this.codiceFiliale = this.dispositivoRilevamento.getFilialeAssociata().getIdentificativo();
@@ -168,6 +172,22 @@ public class AttendApp {
         this.observers.forEach(obs -> {
             obs.accodaRichiesteOreStraordinarie(richiestaStraordinaria);
         });
+    }
+
+    public LinkedList<Evento> getEventiEccezionali(){
+        return this.eventiEccezionali;
+    }
+
+    public void rifutaEventoEccezionale(Evento evento){
+        this.eventiEccezionali.remove(evento);
+    }
+
+    public void autorizzaEventoEccezionale(Evento evento){
+        notifyObserverEventoEccezionale(evento);
+    }
+
+    public void addEventoEccezionale(Evento evento){
+        this.eventiEccezionali.add(evento);
     }
 
 
