@@ -80,10 +80,8 @@ public class Main {
                                     main.attendApp.setIdDipendenteLogged(0);
                                     break;
 
-                                default:
-                                    // System.exit(1);
                             }
-                        } while(!choice_dip.equals("4"));
+                        } while(!choice_dip.equals("6"));
                         break;
                     }
 
@@ -168,7 +166,7 @@ public class Main {
         System.out.println("--------------");
         System.out.println("1.Gestisci Riepilogo Mensile");
         System.out.println("2.Valida e invia riepilogo");
-        System.out.println("2.Gestisci eventi eccezionali");
+        System.out.println("3.Gestisci eventi eccezionali");
         System.out.println("4.Esci");
         System.out.println("--------------");
         System.out.println("Effettua una scelta:");
@@ -323,6 +321,7 @@ public class Main {
 
          }else {
            attendApp.notifyObserverOreStraordinarie(new RichiestaStraordinaria(data,numOre));
+           System.out.println("Richiesta inviata correttamente!");
          }
 
      }
@@ -382,6 +381,10 @@ public class Main {
          LinkedList<Evento> eventiEccezionali = attendApp.getEventiEccezionali();
         int idEvento;
         String yN;
+        if (eventiEccezionali.size() == 0){
+            System.out.println("Non ci sono eventi da gestire!");
+            return;
+        }
          System.out.println("Lista Eventi in attesa di gestione...");
         for(int i = 0 ; i< eventiEccezionali.size(); i++){
             System.out.println("id: " + i + " " + eventiEccezionali.get(i).toString());

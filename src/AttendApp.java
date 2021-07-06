@@ -39,7 +39,7 @@ public class AttendApp {
 
     public boolean identificaDipendente(){
         int codicebio = dispositivoRilevamento.getCodiceBio();
-        this.observers.get(1).getDipendenti().forEach( (id,dip)->{
+        this.observers.getFirst().getDipendenti().forEach( (id,dip)->{
             if(dip.getCodicebio() == codicebio)
             this.idDipendenteLogged = dip.getIdDipendente();
             this.codiceBioDipLogged = codicebio;
@@ -145,7 +145,7 @@ public class AttendApp {
     }
 
     public Dipendente getDipendenteLogged(){
-        return this.observers.get(1).getDipendenti().get(getIdDipendenteLogged());
+        return this.observers.getFirst().getDipendenti().get(getIdDipendenteLogged());
     }
 
     public void registerObserver(SistemaStipendi observer){
