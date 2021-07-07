@@ -31,9 +31,14 @@ public class SistemaStipendi {
 
 
     public boolean validaRiepilogo(Riepilogo riepilogo){
-        riepilogo.setValidato(true);
-        this.archivioRiepiloghi.add(riepilogo);
-        return true;
+        if(riepilogo.getMese()< 1 || riepilogo.getMese()> 12 ||  riepilogo.getAnno() > 3000 || riepilogo.getAnno() < 2000){
+            return  false;
+        }else{
+            riepilogo.setValidato(true);
+            this.archivioRiepiloghi.add(riepilogo);
+            return true;
+        }
+
     }
 
     public HashMap<Integer,Dipendente> getDipendenti() {
@@ -46,12 +51,26 @@ public class SistemaStipendi {
         this.dipendenti.put(id, dipendente);
     }
 
-    public void accodaRichiestaEventiEccezionali(Evento evento){
+    public boolean accodaRichiestaEventiEccezionali(Evento evento){
         this.eventiEccezionali.add(evento);
+        return true;
     }
 
-    public void accodaRichiesteOreStraordinarie(RichiestaStraordinaria richiestaStraordinaria){
+    public boolean accodaRichiesteOreStraordinarie(RichiestaStraordinaria richiestaStraordinaria){
+        if(richiestaStraordinaria.getNumOre() > 5) return false;
         this.richiesteStraordinarie.add(richiestaStraordinaria);
+        return true;
     }
 
+    public LinkedList<Riepilogo> getArchivioRiepiloghi() {
+        return archivioRiepiloghi;
+    }
+
+    public LinkedList<Evento> getEventiEccezionali() {
+        return eventiEccezionali;
+    }
+
+    public LinkedList<RichiestaStraordinaria> getRichiesteStraordinarie() {
+        return richiesteStraordinarie;
+    }
 }

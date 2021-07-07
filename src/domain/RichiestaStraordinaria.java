@@ -10,4 +10,12 @@ public class RichiestaStraordinaria {
         this.data = data;
         this.numOre = numOre;
     }
+
+    public LocalDate getData() {
+        return data;
+    }
+
+    public int getNumOre() {
+        return numOre;
+    }
 }

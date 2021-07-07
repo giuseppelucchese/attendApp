@@ -7,7 +7,7 @@ public class Dipendente {
     private String cognome;
     private String telefono;
     private String email;
-    private final int codicebio;
+    private  int codicebio;
 
     public Dipendente(String nome, String cognome, String telefono, String email, int codicebio) {
 
@@ -18,6 +18,7 @@ public class Dipendente {
         this.codicebio = codicebio;
     }
 
+    public Dipendente(){}
 
     public void setIdDipendente(int idDipendente) {
         this.idDipendente = idDipendente;

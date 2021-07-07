@@ -16,6 +16,19 @@ public class Registrazione {
     public Registrazione() {
     }
 
+    public Registrazione(int mese, int anno, int giorno, int oraEntrata, int minEntrata, int oraUscita, int minUscita, int idRegistrazione, Dipendente dipendente, Filiale filiale) {
+        this.mese = mese;
+        this.anno = anno;
+        this.giorno = giorno;
+        this.oraEntrata = oraEntrata;
+        this.minEntrata = minEntrata;
+        this.oraUscita = oraUscita;
+        this.minUscita = minUscita;
+        this.idRegistrazione = idRegistrazione;
+        this.dipendente = dipendente;
+        this.filiale = filiale;
+    }
+
     public Dipendente getDipendente() {
         return dipendente;
     }

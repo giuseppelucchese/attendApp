@@ -52,11 +52,11 @@ public class AttendApp {
      return true;
     }
 
-    public void registraIngresso(){
+    public boolean registraIngresso(){
 
         LocalDateTime now = LocalDateTime.now();
-        int idRegistrazione= now.getYear()+now.getMonthValue()+now.getDayOfMonth()+idDipendenteLogged+codiceFiliale;
-        int idRiepilogo = now.getYear()+now.getMonthValue(); // chiave del riepilogo mese+anno
+        int idRegistrazione= getIdRegistrazione();
+        int idRiepilogo = getIdRiepilogo(); // chiave del riepilogo mese+anno
 
         Riepilogo riepilogo = this.riepiloghi.get(idRiepilogo);
         if(riepilogo == null) riepilogo = new Riepilogo(now.getMonthValue(),now.getYear());
@@ -76,16 +76,18 @@ public class AttendApp {
         riepilogo.addRegistrazione(registrazione);
 
         //aggiungo il riepilogo ai riepiloghi totali
-        this.riepiloghi.put(idRiepilogo, riepilogo);
+        addRiepilogo(idRiepilogo,riepilogo);
+
+        return true;
 
 
     }
 
-    public void registraUscita(){
+    public boolean registraUscita(){
 
         LocalDateTime now = LocalDateTime.now();
-        int idRegistrazione= now.getYear()+now.getMonthValue()+now.getDayOfMonth()+idDipendenteLogged+codiceFiliale;
-        int idRiepilogo = now.getYear()+now.getMonthValue(); // chiave del riepilogo mese+anno
+        int idRegistrazione= getIdRegistrazione();
+        int idRiepilogo = getIdRiepilogo(); // chiave del riepilogo mese+anno
 
         Riepilogo riepilogo = this.riepiloghi.get(idRiepilogo);
         if(riepilogo == null) riepilogo = new Riepilogo(now.getMonthValue(),now.getYear());
@@ -105,19 +107,40 @@ public class AttendApp {
         riepilogo.addRegistrazione(registrazione);
 
         //aggiungo il riepilogo ai riepiloghi totali
-        this.riepiloghi.put(idRiepilogo, riepilogo);
+
+        addRiepilogo(idRiepilogo,riepilogo);
+
+        return true;
 
 
     }
 
+    public void addRiepilogo(int idRiepilogo, Riepilogo riepilogo){
+        this.riepiloghi.put(idRiepilogo, riepilogo);
+    }
+
     public Riepilogo getRiepilogoMensile( int mese, int anno){
-        return  this.riepiloghi.get(mese+anno);
+        return  this.riepiloghi.get(mese + anno);
+    }
+
+    public int getIdRiepilogo(){
+        LocalDateTime now = LocalDateTime.now();
+        return now.getMonthValue() + now.getYear();
+    }
+
+    public int getIdRegistrazione(){
+        LocalDateTime now = LocalDateTime.now();
+        return now.getYear()+now.getMonthValue()+now.getDayOfMonth()+idDipendenteLogged+codiceFiliale;
     }
 
     public Map<Integer,Registrazione> getRiepilogoMensileDipendente(int mese, int anno, int idDipendente){
 
-        if(getRiepilogoMensile(mese,anno) == null) return null;
-        return getRiepilogoMensile(mese,anno).getRegistrazioniMensiliDipendente(idDipendente);
+        if(getRiepilogoMensile(mese,anno) == null){
+            return null;
+        }else{
+            return getRiepilogoMensile(mese,anno).getRegistrazioniMensiliDipendente(idDipendente);
+        }
+
 
     }
 
